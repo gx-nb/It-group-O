@@ -35,6 +35,7 @@ INSTALLED_APPS = [
 # 中间件（不用改）
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -100,3 +101,4 @@ LOGOUT_REDIRECT_URL = 'login'  # 登出后跳转到登录页
 # 表单美化配置
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap4"
 CRISPY_TEMPLATE_PACK = "bootstrap4"
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
