@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+<title>EduCheck Register</title>
+
+<style>
+
+body{
+    font-family: Arial;
+    background:#f2f2f2;
+}
+
+.container{
+    width:500px;
+    margin:100px auto;
+    text-align:center;
+}
+
+.form-box{
+    border:2px solid #888;
+    padding:30px;
+    margin-top:20px;
+}
+
+.form-row{
+    display:flex;
+    align-items:center;
+    margin:15px 0;
+}
+
+.form-row label{
+    width:150px;
+    text-align:left;
+}
+
+.form-row input{
+    flex:1;
+    padding:8px;
+}
+
+/* 错误红框 */
+.is-invalid{
+    border:2px solid red !important;
+}
+
+/* Django错误提示 */
+.errorlist{
+    color:#dc3545;
+    list-style:none;
+    padding-left:0;
+    margin-bottom:10px;
+}
+
+/* password提示 */
+.help{
+    display:none;
+    font-size:14px;
+    color:#333;
+    margin-left:150px;
+    text-align:left;
+    margin-top:-5px;
+    margin-bottom:10px;
+}
+
+button{
+    margin-top:20px;
+    padding:10px 40px;
+}
+
+.role-box{
+    flex:1;
+    text-align:left;
+}
+
+.role-box label{
+    margin-right:20px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>EduCheck</h1>
+<h2>Register</h2>
+
+<div class="form-box">
+
+{% if form.errors %}
+
+<div class="errorlist">
+{{ form.errors }}
+</div>
+{% endif %}
+
+<form method="POST">
+{% csrf_token %}
+
+<div class="form-row">
+<label>Username:</label>
+<input type="text" name="username"
+value="{{ form.username.value|default:'' }}"
+class="{% if form.errors.username %}is-invalid{% endif %}"
+required
+onfocus="showHelp('userHelp')"
+onblur="hideHelp('userHelp')">
+</div>
+
+<p id="userHelp" class="help">
+Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only.
+</p>
+
+<div class="form-row">
+<label>Email:</label>
+<input type="email" name="email"
+value="{{ form.email.value|default:'' }}"
+class="{% if form.errors.email %}is-invalid{% endif %}"
+required>
+</div>
+
+<div class="form-row">
+<label>First name:</label>
+<input type="text" name="first_name"
+value="{{ form.first_name.value|default:'' }}">
+</div>
+
+<div class="form-row">
+<label>Last name:</label>
+<input type="text" name="last_name"
+value="{{ form.last_name.value|default:'' }}">
+</div>
+
+<div class="form-row">
+<label>Password:</label>
+<input type="password" name="password1"
+class="{% if form.errors.password1 %}is-invalid{% endif %}"
+required
+onfocus="showHelp('passHelp')"
+onblur="hideHelp('passHelp')">
+</div>
+
+<div id="passHelp" class="help">
+<p>• Your password must contain at least 8 characters.</p>
+<p>• Your password can’t be entirely numeric.</p>
+<p>• Your password can’t be too similar to your personal information.</p>
+<p>• Your password can’t be a commonly used password.</p>
+</div>
+
+<div class="form-row">
+<label>Confirm Password:</label>
+<input type="password" name="password2"
+class="{% if form.errors.password2 %}is-invalid{% endif %}"
+required
+onfocus="showHelp('confirmHelp')"
+onblur="hideHelp('confirmHelp')">
+</div>
+
+<p id="confirmHelp" class="help">
+Enter the same password as before, for verification.
+</p>
+
+
+<button type="submit">Register</button>
+
+</form>
+
+</div>
+
+<p>
+Already have an account?
+<a href="{% url 'login' %}">Login here</a>
+</p>
+
+</div>
+
+<script>
+
+function showHelp(id){
+    document.getElementById(id).style.display="block";
+}
+
+function hideHelp(id){
+    document.getElementById(id).style.display="none";
+}
+
+</script>
+
+</body>
+</html>

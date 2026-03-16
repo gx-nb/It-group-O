@@ -1,0 +1,131 @@
+{% extends 'accommodation/base.html' %}
+
+{% block content %}
+
+<h2>Check-out Application Review</h2>
+
+
+<div class="card">
+
+<h3>Application History</h3>
+
+<table>
+
+<tr>
+<th>Username</th>
+<th>Room</th>
+<th>Status</th>
+<th>Check-out Date</th>
+</tr>
+
+{% for req in applications %}
+
+<tr>
+<td>{{ req.student.user.username }}</td>
+<td>{{ req.room_number }}</td>
+<td>
+
+{% if req.status == "pending" %}
+<span style="color:orange;font-weight:600">Pending</span>
+
+{% elif req.status == "approved" %}
+<span style="color:green;font-weight:600">Approved</span>
+
+{% elif req.status == "completed" %}
+<span style="color:green;font-weight:600">Completed</span>
+
+{% else %}
+<span style="color:red;font-weight:600">Rejected</span>
+{% endif %}
+
+</td>
+<td>{{ req.requested_check_out_date|date:"F d, Y" }}</td>
+</tr>
+
+{% endfor %}
+
+</table>
+
+</div>
+
+
+
+<div class="card">
+
+<h3>Check-in Record</h3>
+
+<table>
+
+<tr>
+<th>Username</th>
+<th>Room</th>
+<th>Check-in Date</th>
+</tr>
+
+<tr>
+<td>{{ check_out.student.user.username }}</td>
+<td>{{ check_out.room_number }}</td>
+<td>{{ check_out.check_in_record.check_in_date|date:"F d, Y" }}</td>
+</tr>
+
+</table>
+
+</div>
+
+
+
+<div class="card">
+
+<h3>Application Details</h3>
+
+<p class="info-text">
+<strong>Username:</strong> {{ check_out.student.user.username }}
+</p >
+
+<p class="info-text">
+<strong>Room No:</strong> {{ check_out.room_number }}
+</p >
+
+<p class="info-text">
+<strong>Check-out Date:</strong> {{ check_out.requested_check_out_date|date:"F d, Y" }}
+</p >
+
+<p class="info-text">
+<strong>Reason:</strong> {{ check_out.reason }}
+</p >
+
+<p class="info-text">
+<strong>Room Status:</strong> {{ check_out.issues }}
+</p >
+
+</div>
+
+
+
+<div class="card">
+
+<h3>Admin Comment</h3>
+
+<form method="POST">
+
+{% csrf_token %}
+
+<textarea name="admin_comment"></textarea>
+
+<div class="center-btn">
+
+<button class="btn" name="status" value="approved">
+Approve
+</button>
+
+<button class="btn" name="status" value="rejected">
+Reject
+</button>
+
+</div>
+
+</form>
+
+</div>
+
+{% endblock %}

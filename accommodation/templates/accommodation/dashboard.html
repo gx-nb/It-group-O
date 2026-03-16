@@ -1,0 +1,454 @@
+{% extends 'accommodation/base.html' %}
+
+{% block content %}
+
+<h1>Dashboard</h1>
+
+<div class="card">
+<p class="info-text"><strong>Welcome:</strong> {{ request.user.username }}</p>
+<p class="info-text"><strong>Role:</strong> {{ profile.role|title }}</p>
+</div>
+
+
+<!-- ================= STUDENT DASHBOARD ================= -->
+
+{% if profile.role == "student" %}
+
+<div class="card">
+<h3>Check-in Information</h3>
+
+{% if check_in %}
+
+<p><strong>Room Number:</strong> {{ check_in.room_number }}</p>
+<p><strong>Check-in Date:</strong> {{ check_in.check_in_date }}</p>
+
+<p>
+<strong>Status:</strong>
+
+{% if check_in.status == "active" %}
+<span style="color:green;font-weight:600">Active</span>
+
+{% elif check_in.status == "checked_out" %}
+<span style="color:gray;font-weight:600">Checked Out</span>
+
+{% endif %}
+</p>
+
+{% else %}
+<p>No check-in record.</p>
+{% endif %}
+
+</div>
+
+
+<!-- ================= STUDENT INSPECTION ================= -->
+
+<div class="card">
+
+<h3>Your Inspection Requests</h3>
+
+{% for i in inspections %}
+
+<div style="margin-bottom:20px">
+
+<p><strong>Room:</strong> {{ i.room_number }}</p>
+
+<p><strong>Status:</strong>
+
+{% if i.status == "submitted" %}
+<span style="color:red;font-weight:600">Submitted</span>
+
+{% elif i.status == "fixing" %}
+<span style="color:orange;font-weight:600">Fixing</span>
+
+{% elif i.status == "completed" %}
+<span style="color:green;font-weight:600">Completed</span>
+
+{% endif %}
+
+</p>
+
+<p><strong>Issues:</strong>
+
+{% if i.issues %}
+{{ i.issues }}
+{% else %}
+No issues
+{% endif %}
+
+</p>
+
+{% if i.comments %}
+<p><strong>Comments:</strong> {{ i.comments }}</p>
+{% endif %}
+
+{% if i.status == "submitted" %}
+<a class="btn" href="{% url 'edit_inspection' i.id %}">Edit</a>
+<a class="btn"
+href="{% url 'delete_inspection' i.id %}"
+onclick="return confirm('Confirm delete?');">
+Delete
+</a>
+{% endif %}
+
+<hr>
+
+</div>
+
+{% empty %}
+<p>No inspection records.</p>
+{% endfor %}
+
+<a class="btn" href="{% url 'inspection' %}">
+Submit New Inspection
+</a>
+
+</div>
+
+
+
+<!-- ================= CHECKOUT ================= -->
+
+<div class="card">
+
+<h3>Your Check-out Requests</h3>
+
+{% for req in check_out_requests %}
+
+<div style="margin-bottom:20px">
+
+<p><strong>Status:</strong>
+
+{% if req.status == "pending" %}
+<span style="color:orange;font-weight:600">Pending</span>
+
+{% elif req.status == "approved" %}
+<span style="color:green;font-weight:600">Approved</span>
+
+{% elif req.status == "completed" %}
+<span style="color:blue;font-weight:600">Completed</span>
+
+{% else %}
+<span style="color:red;font-weight:600">Rejected</span>
+
+{% endif %}
+
+</p>
+
+<p><strong>Room:</strong> {{ req.room_number }}</p>
+
+<p><strong>Requested Date:</strong> {{ req.requested_check_out_date }}</p>
+
+<p><strong>Reason:</strong> {{ req.reason }}</p>
+
+{% if req.comments %}
+<p><strong>Comments:</strong> {{ req.comments }}</p>
+{% endif %}
+
+{% if req.status == "pending" %}
+<a class="btn" href="{% url 'edit_check_out' req.id %}">Edit</a>
+<a class="btn"
+href="{% url 'delete_check_out' req.id %}"
+onclick="return confirm('Confirm delete?');">
+Delete
+</a>
+{% endif %}
+
+<hr>
+
+</div>
+
+{% empty %}
+<p>No check-out requests.</p>
+{% endfor %}
+
+{% if allow_create_checkout %}
+<a class="btn" href="{% url 'create_check_out' %}">
+Create Check-out Request
+</a>
+{% endif %}
+
+</div>
+
+{% endif %}
+
+
+
+<!-- ================= ADMIN DASHBOARD ================= -->
+
+{% if profile.role == "admin" %}
+
+<!-- CHECK IN -->
+
+<div class="card">
+
+<h3>All Check-in Records</h3>
+
+<form method="GET" class="search-box">
+
+<input
+type="text"
+name="checkin_search"
+placeholder="USERNAME OR ROOM No."
+class="form-control"
+value="{{ request.GET.checkin_search }}"
+>
+
+<button class="btn">Search</button>
+
+</form>
+
+<table>
+
+<tr>
+<th>Username</th>
+<th>Room</th>
+<th>Status</th>
+<th>Date</th>
+<th>Action</th>
+</tr>
+
+{% for record in check_in_records %}
+
+<tr>
+
+<td>{{ record.student.user.username }}</td>
+<td>{{ record.room_number }}</td>
+
+<td>
+
+{% if record.status == "active" %}
+<span style="color:green;font-weight:600">Active</span>
+
+{% elif record.status == "checked_out" %}
+<span style="color:gray;font-weight:600">Checked Out</span>
+
+{% endif %}
+
+</td>
+
+<td>{{ record.check_in_date }}</td>
+
+<td>
+
+{% if record.status != "checked_out" %}
+
+<a href="{% url 'edit_check_in' record.id %}" class="btn">Edit</a>
+
+<a class="btn"
+href="{% url 'delete_check_in' record.id %}"
+onclick="return confirm('Confirm delete?');">
+Delete
+</a>
+
+{% else %}
+<span style="color:gray;">History</span>
+{% endif %}
+
+</td>
+
+</tr>
+
+{% empty %}
+<tr>
+<td colspan="5">No check-in records.</td>
+</tr>
+{% endfor %}
+
+</table>
+
+<br>
+
+<a class="btn" href="{% url 'create_check_in' %}">
+Create Check-in Record
+</a>
+
+</div>
+
+
+
+<!-- CHECKOUT ADMIN -->
+
+<div class="card">
+
+<h3>Check-out Requests</h3>
+
+<form method="GET" class="search-box">
+
+<input
+type="text"
+name="checkout_search"
+placeholder="USERNAME OR ROOM No."
+class="form-control"
+value="{{ request.GET.checkout_search }}"
+>
+
+<button class="btn">Search</button>
+
+</form>
+
+<table>
+
+<tr>
+<th>Username</th>
+<th>Room</th>
+<th>Status</th>
+<th>Action</th>
+</tr>
+
+{% for req in check_out_requests %}
+
+<tr>
+
+<td>{{ req.student.user.username }}</td>
+<td>{{ req.room_number }}</td>
+
+<td>
+
+{% if req.status == "pending" %}
+<span style="color:orange;font-weight:600">Pending</span>
+
+{% elif req.status == "approved" %}
+<span style="color:green;font-weight:600">Approved</span>
+
+{% elif req.status == "completed" %}
+<span style="color:blue;font-weight:600">Completed</span>
+
+{% else %}
+<span style="color:red;font-weight:600">Rejected</span>
+
+{% endif %}
+
+</td>
+
+<td>
+
+<a class="btn" href="{% url 'review_check_out' req.id %}">
+Review
+</a>
+
+{% if req.status == "approved" %}
+<a class="btn" href="{% url 'final_check_out' req.id %}">
+Confirm Return Key
+</a>
+{% endif %}
+
+<a class="btn"
+href="{% url 'delete_checkout_admin' req.id %}"
+onclick="return confirm('Confirm delete?');">
+Delete
+</a>
+
+</td>
+
+</tr>
+
+{% empty %}
+<tr>
+<td colspan="4">No requests.</td>
+</tr>
+{% endfor %}
+
+</table>
+
+</div>
+
+
+
+<!-- INSPECTION ADMIN -->
+
+<div class="card">
+
+<h3>Inspection Requests</h3>
+
+<form method="GET" class="search-box">
+
+<input
+type="text"
+name="search"
+placeholder="USERNAME OR ROOM No."
+class="form-control"
+value="{{ request.GET.search }}"
+>
+
+<button class="btn">Search</button>
+
+</form>
+
+<table>
+
+<tr>
+<th>Username</th>
+<th>Room</th>
+<th>Issues</th>
+<th>Status</th>
+<th>Action</th>
+</tr>
+
+{% for i in inspections %}
+
+<tr>
+
+<td>{{ i.student.user.username }}</td>
+<td>{{ i.room_number }}</td>
+
+<td>
+{% if i.issues %}
+{{ i.issues }}
+{% else %}
+No issues
+{% endif %}
+</td>
+
+<td>
+
+{% if i.status == "submitted" %}
+<span style="color:red;font-weight:600">Submitted</span>
+
+{% elif i.status == "fixing" %}
+<span style="color:orange;font-weight:600">Fixing</span>
+
+{% elif i.status == "completed" %}
+<span style="color:green;font-weight:600">Completed</span>
+
+{% endif %}
+
+</td>
+
+<td>
+
+{% if i.status == "submitted" %}
+<a class="btn" href="{% url 'fix_inspection' i.id %}">
+Start Fixing
+</a>
+{% endif %}
+
+{% if i.status == "fixing" %}
+<a class="btn" href="{% url 'complete_inspection' i.id %}">
+Mark Completed
+</a>
+{% endif %}
+
+<a class="btn"
+href="{% url 'delete_inspection' i.id %}"
+onclick="return confirm('Confirm delete?');">
+Delete
+</a>
+
+</td>
+
+</tr>
+
+{% empty %}
+<tr>
+<td colspan="5">No inspection requests.</td>
+</tr>
+{% endfor %}
+
+</table>
+
+</div>
+
+{% endif %}
+
+{% endblock %}

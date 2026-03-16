@@ -1,0 +1,337 @@
+body{
+    margin:0;
+    font-family:Arial, sans-serif;
+    background:#f4f6f9;
+    color:#333;
+}
+
+/* Layout */
+
+.layout{
+    display:flex;
+}
+
+/* Sidebar */
+
+.sidebar{
+    width:220px;
+    background:#2c3e50;
+    min-height:100vh;
+    padding:20px;
+}
+
+.sidebar .logo{
+    color:white;
+    margin-bottom:30px;
+    text-align:center;
+}
+
+.sidebar a{
+    display:block;
+    color:white;
+    text-decoration:none;
+    margin:10px 0;
+    padding:10px 12px;
+    border-radius:6px;
+    transition:all 0.25s;
+}
+
+.sidebar a:hover{
+    background:#34495e;
+    padding-left:15px;
+}
+
+.sidebar .logout{
+    margin-top:40px;
+    color:#ffcccc;
+}
+
+
+/* Content */
+
+.content{
+    flex:1;
+    padding:40px;
+    max-width:1100px;
+    margin:auto;
+    text-align: center;
+}
+
+h1,h2,h3{
+    text-align:center;
+}
+
+
+/* Cards */
+
+.card{
+    background:white;
+    padding:30px;
+    margin-bottom:25px;
+    border-radius:12px;
+    box-shadow:0 4px 12px rgba(0,0,0,0.06);
+}
+
+.card h3{
+    margin-bottom:20px;
+    text-align:center;
+}
+
+
+/* Welcome & Room number */
+
+.info-text{
+    font-size:19px !important;
+    font-weight:500;
+    text-align:center;
+}
+
+
+/* Form */
+
+.form-group{
+    margin-bottom:22px;
+}
+
+label{
+    font-weight:600;
+    display:block;
+    margin-bottom:10px;
+}
+
+
+/* Inputs */
+
+input,
+select,
+textarea{
+    width:100%;
+    max-width:420px;
+    height:44px;
+    font-size:16px;
+    font-family: inherit;
+    padding:10px 14px;
+    border-radius:8px;
+    border:1px solid #ccc;
+    background:white;
+    box-sizing:border-box;
+    margin:8px auto;
+    display:block;
+    text-align: center;
+}
+
+textarea{
+    height:auto;
+    min-height:90px;
+}
+
+
+/* Date input font */
+
+input[type="date"]{
+    font-size:16px;
+    font-family:Arial, sans-serif;
+}
+
+
+/* Checkbox */
+
+input[type="checkbox"]{
+    width:18px;
+    height:18px;
+}
+
+
+/* Buttons */
+
+.btn{
+    display:inline-block;
+    padding:10px 22px;
+    background:#3b82f6;
+    color:white;
+    font-size:16px;
+    border-radius:8px;
+    text-decoration:none;
+    border:none;
+    cursor:pointer;
+    width:auto;
+    margin:20px auto;
+    transition:all 0.25s;
+}
+
+.btn:hover{
+    background:#2563eb;
+    transform:translateY(-1px);
+}
+
+
+/* Button center */
+
+.center-btn{
+    text-align:center;
+    margin-top:20px;
+}
+
+
+/* Tables */
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    margin-top:15px;
+}
+
+th{
+    background:#f1f3f5;
+    text-align:left;
+    padding:12px;
+    font-weight:600;
+}
+
+td{
+    padding:12px;
+    border-bottom:1px solid #eee;
+}
+
+tr:hover{
+    background:#fafafa;
+}
+
+
+/* Error */
+
+.errorlist{
+    color:#dc3545;
+    font-weight:bold;
+    list-style:none;
+    padding-left:0;
+}
+
+.is-invalid{
+    border:2px solid red !important;
+}
+
+.invalid-feedback{
+    color:#dc3545;
+    font-size:14px;
+    margin-top:4px;
+}
+
+
+/* Messages */
+
+.messages{
+    margin-bottom:20px;
+}
+
+
+/* Responsive */
+
+@media (max-width:768px){
+
+    .layout{
+        flex-direction:column;
+    }
+
+    .sidebar{
+        width:100%;
+        min-height:auto;
+    }
+
+}
+
+/* -------- checkout page alignment -------- */
+
+/* 标题居中 */
+h1{
+    text-align:center;
+}
+
+/* card 标题 */
+.card h3{
+    text-align:center;
+}
+
+
+/* Update 按钮居中 */
+.center-btn{
+    text-align:center;
+}
+
+/* Room status list */
+/* FIX inspection checkbox alignment */
+
+.issue-list{
+width:260px;
+margin:0 auto;
+display:flex;
+flex-direction:column;
+align-items:flex-start;
+gap:12px;
+}
+
+.issue-item{
+display:flex;
+align-items:center;
+gap:8px;
+margin:0;
+}
+
+.issue-item input{
+margin:0;
+}
+
+
+
+
+/* 表格内容居中 */
+
+table{
+    text-align:center;
+}
+
+th, td{
+    text-align:center;
+}
+
+/* card 内文字居中 */
+
+.card{
+    text-align:center;
+}
+
+/* 列表内容居中 */
+
+ul{
+    list-style-position: inside;
+    text-align:center;
+}
+
+/* Search box layout fix */
+
+.search-box{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:8px;
+}
+
+.search-box input{
+    width:240px;
+    margin:0;
+}
+
+.search-box button{
+    margin:0;
+}
+
+
+.issue-item{
+    width:300px;
+    margin:0 auto;
+}
+.issue-list label{
+    display:flex;
+    align-items:center;
+    gap:8px;
+}

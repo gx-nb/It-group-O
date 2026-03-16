@@ -1,0 +1,46 @@
+{% extends "accommodation/base.html" %}
+
+{% block content %}
+
+<h1>Create Check-in Record</h1>
+
+<div class="card">
+
+<form method="POST">
+
+{% csrf_token %}
+
+<div class="form-group">
+
+<label>Student Username</label>
+
+{{ form.student }}
+
+</div>
+
+<div class="form-group">
+
+<label>Room Number</label>
+
+{{ form.room_number }}
+
+</div>
+
+<div style="margin-top:25px;">
+
+<button type="submit" class="btn">
+Create Record
+</button>
+
+</div>
+
+</form>
+
+</div>
+
+
+<a href="{% url 'dashboard' %}" class="btn">
+Back to Dashboard
+</a>
+
+{% endblock %}

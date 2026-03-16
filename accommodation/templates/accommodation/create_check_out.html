@@ -1,0 +1,132 @@
+{% extends 'accommodation/base.html' %}
+
+{% block content %}
+
+<h1>Check-out Application</h1>
+<div class="checkout-page">
+
+<form method="POST">
+{% csrf_token %}
+
+<div class="card">
+
+<p class="info-text"><strong>Welcome:</strong> {{ request.user.username }}</p >
+
+<p class="info-text">
+<strong>Room No. :</strong>
+{{ room_number }}
+</p >
+
+</div>
+
+
+<div class="card">
+
+<h3>Room Status</h3>
+
+<div class="issue-list">
+
+<label class="issue-item">
+<input type="checkbox" name="issues" value="No issues"
+{% if "No issues" in form.instance.issues %}checked{% endif %}>
+No issues
+</label>
+
+<label class="issue-item">
+<input type="checkbox" name="issues" value="Walls damaged"
+{% if "Walls damaged" in form.instance.issues %}checked{% endif %}>
+Walls damaged
+</label>
+
+<label class="issue-item">
+<input type="checkbox" name="issues" value="Furniture damaged"
+{% if "Furniture damaged" in form.instance.issues %}checked{% endif %}>
+Furniture damaged
+</label>
+
+<label class="issue-item">
+<input type="checkbox" name="issues" value="Bathroom problem"
+{% if "Bathroom problem" in form.instance.issues %}checked{% endif %}>
+Bathroom problem
+</label>
+
+<label class="issue-item">
+<input type="checkbox" name="issues" value="Window problem"
+{% if "Window problem" in form.instance.issues %}checked{% endif %}>
+Window problem
+</label>
+
+<label class="issue-item">
+<input type="checkbox" name="issues" value="Electricity problem"
+{% if "Electricity problem" in form.instance.issues %}checked{% endif %}>
+Electricity problem
+</label>
+
+</div>
+
+</div>
+
+
+<div class="card">
+
+<label>Check-out Date</label>
+
+<input type="date"
+       name="requested_check_out_date"
+       value="{{ form.instance.requested_check_out_date|date:'Y-m-d' }}"
+       required>
+
+</div>
+
+
+<div class="card">
+
+<label>Reason</label>
+
+<select name="reason">
+
+<option value="Contract ended"
+{% if form.instance.reason == "Contract ended" %}selected{% endif %}>
+Contract ended
+</option>
+
+<option value="Graduation"
+{% if form.instance.reason == "Graduation" %}selected{% endif %}>
+Graduation
+</option>
+
+<option value="Personal reason"
+{% if form.instance.reason == "Personal reason" %}selected{% endif %}>
+Personal reason
+</option>
+
+</select>
+
+</div>
+
+
+<div class="card">
+
+<label>Comments (optional)</label>
+
+<textarea name="comments">{{ form.instance.comments }}</textarea>
+
+</div>
+
+
+<div class="center-btn">
+<button class="btn" type="submit">
+
+{% if form.instance.pk %}
+Update
+{% else %}
+Submit
+{% endif %}
+
+</button>
+</div>
+
+</form>
+
+
+{% endblock %}

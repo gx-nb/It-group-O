@@ -1,0 +1,128 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="UTF-8">
+<title>Accommodation System</title>
+
+<link rel="stylesheet" href="{% static 'css/custom.css' %}">
+
+<style>
+
+/* Popup notification */
+
+#popup-message{
+    position:fixed;
+    top:20px;
+    right:20px;
+
+    background:#28a745;
+    color:white;
+
+    padding:12px 20px;
+
+    border-radius:6px;
+
+    font-size:15px;
+
+    box-shadow:0 4px 10px rgba(0,0,0,0.2);
+
+    z-index:9999;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="layout">
+
+<!-- Sidebar -->
+<div class="sidebar">
+
+<h2 class="logo">EduCheck</h2>
+
+<!-- Dashboard -->
+<a href=" {% url 'dashboard' %}">
+Dashboard
+</a >
+
+{% if profile %}
+
+<!-- Student Menu -->
+{% if profile.role == 'student' %}
+
+<a href="{% url 'inspection' %}">
+Inspection Requests
+</a >
+
+<a href="{% url 'create_check_out' %}">
+Check-out
+</a >
+
+{% endif %}
+
+<!-- Admin Menu -->
+{% if profile.role == 'admin' %}
+
+<a href="{% url 'create_check_in' %}">
+Create Check-in
+</a >
+
+{% endif %}
+
+{% endif %}
+
+<!-- Logout -->
+<a href="{% url 'logout' %}" class="logout">
+Logout
+</a >
+
+</div>
+
+
+<!-- Main content -->
+<div class="content">
+
+{% block content %}
+{% endblock %}
+
+</div>
+
+</div>
+
+
+<!-- Popup notification -->
+
+{% if messages %}
+<div id="popup-message">
+{% for message in messages %}
+{{ message }}
+{% endfor %}
+</div>
+{% endif %}
+
+
+<script src="{% static 'js/main.js' %}"></script>
+
+<script>
+
+const popup = document.getElementById("popup-message");
+
+if(popup){
+
+setTimeout(function(){
+
+popup.style.display="none";
+
+},1000);
+
+}
+
+</script>
+
+
+</body>
+</html>
