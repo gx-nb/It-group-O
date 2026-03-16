@@ -11,7 +11,11 @@ SECRET_KEY = 'django-insecure-abc1234567890'
 DEBUG = True
 
 # 允许访问的域名（部署时加PythonAnywhere的域名）
-ALLOWED_HOSTS = ['localhost', '127.0.0.1']
+ALLOWED_HOSTS = [
+    'localhost',
+    '127.0.0.1',
+    'it-group-o-qcnu.onrender.com'
+]
 
 # 注册应用（新增accommodation、crispy_forms）
 INSTALLED_APPS = [
