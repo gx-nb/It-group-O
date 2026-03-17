@@ -4,17 +4,47 @@
 
 <h1>Create Check-in Record</h1>
 
+
+{% if form.non_field_errors %}
+<div class="error-box">
+    {% for error in form.non_field_errors %}
+        <p>{{ error }}</p >
+    {% endfor %}
+</div>
+{% endif %}
+
+
 <div class="card">
 
 <form method="POST">
-
 {% csrf_token %}
 
 <div class="form-group">
 
+{% if form.student.errors %}
+    {% for error in form.student.errors %}
+        <p style="color:red; font-size:14px; margin:5px 0;">
+            {{ error }}
+        </p >
+    {% endfor %}
+{% endif %}
+
 <label>Student Username</label>
 
-{{ form.student }}
+<input
+    list="students"
+    name="student"
+    value="{{ form.instance.student.user.username }}"
+    class="form-control"
+    placeholder="Search username"
+    required
+>
+
+<datalist id="students">
+    {% for s in form.fields.student.queryset %}
+        <option value="{{ s.user.username }}">
+    {% endfor %}
+</datalist>
 
 </div>
 
@@ -27,20 +57,17 @@
 </div>
 
 <div style="margin-top:25px;">
-
 <button type="submit" class="btn">
 Create Record
 </button>
-
 </div>
 
 </form>
 
 </div>
 
-
 <a href="{% url 'dashboard' %}" class="btn">
 Back to Dashboard
-</a>
+</a >
 
 {% endblock %}

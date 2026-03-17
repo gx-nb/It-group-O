@@ -117,7 +117,7 @@ class RoomInspection(models.Model):
 
     student = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
 
-    # ⭐ 新增房间号
+    # add room number
     room_number = models.CharField(max_length=10, null=True, blank=True)
 
     issues = models.TextField(blank=True, null=True)

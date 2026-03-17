@@ -8,31 +8,6 @@
 
 <link rel="stylesheet" href="{% static 'css/custom.css' %}">
 
-<style>
-
-/* Popup notification */
-
-#popup-message{
-    position:fixed;
-    top:20px;
-    right:20px;
-
-    background:#28a745;
-    color:white;
-
-    padding:12px 20px;
-
-    border-radius:6px;
-
-    font-size:15px;
-
-    box-shadow:0 4px 10px rgba(0,0,0,0.2);
-
-    z-index:9999;
-}
-
-</style>
-
 </head>
 
 <body>
@@ -44,14 +19,12 @@
 
 <h2 class="logo">EduCheck</h2>
 
-<!-- Dashboard -->
-<a href=" {% url 'dashboard' %}">
+<a href="{% url 'dashboard' %}">
 Dashboard
 </a >
 
 {% if profile %}
 
-<!-- Student Menu -->
 {% if profile.role == 'student' %}
 
 <a href="{% url 'inspection' %}">
@@ -64,7 +37,6 @@ Check-out
 
 {% endif %}
 
-<!-- Admin Menu -->
 {% if profile.role == 'admin' %}
 
 <a href="{% url 'create_check_in' %}">
@@ -75,7 +47,6 @@ Create Check-in
 
 {% endif %}
 
-<!-- Logout -->
 <a href="{% url 'logout' %}" class="logout">
 Logout
 </a >
@@ -94,35 +65,27 @@ Logout
 </div>
 
 
-<!-- Popup notification -->
-
+<!-- popup message -->
 {% if messages %}
-<div id="popup-message">
-{% for message in messages %}
-{{ message }}
-{% endfor %}
-</div>
+    {% for message in messages %}
+        <div class="popup-message {{ message.tags }}">
+            {{ message }}
+        </div>
+    {% endfor %}
 {% endif %}
 
 
 <script src="{% static 'js/main.js' %}"></script>
 
 <script>
+const popups = document.querySelectorAll(".popup-message");
 
-const popup = document.getElementById("popup-message");
-
-if(popup){
-
-setTimeout(function(){
-
-popup.style.display="none";
-
-},1000);
-
-}
-
+popups.forEach(function(popup){
+    setTimeout(function(){
+        popup.style.display = "none";
+    }, 2000);
+});
 </script>
-
 
 </body>
 </html>

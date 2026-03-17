@@ -4,6 +4,12 @@
 
 <h1>Dashboard</h1>
 
+{% if warning %}
+<div style="color:red; font-size:16px; margin-bottom:15px; text-align:center;">
+    {{ warning }}
+</div>
+{% endif %}
+
 <div class="card">
 <p class="info-text"><strong>Welcome:</strong> {{ request.user.username }}</p>
 <p class="info-text"><strong>Role:</strong> {{ profile.role|title }}</p>

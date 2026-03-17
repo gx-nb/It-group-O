@@ -1,83 +1,12 @@
+{% load static %}
 <!DOCTYPE html>
-
 <html>
+
 <head>
+<meta charset="UTF-8">
 <title>EduCheck Register</title>
 
-<style>
-
-body{
-    font-family: Arial;
-    background:#f2f2f2;
-}
-
-.container{
-    width:500px;
-    margin:100px auto;
-    text-align:center;
-}
-
-.form-box{
-    border:2px solid #888;
-    padding:30px;
-    margin-top:20px;
-}
-
-.form-row{
-    display:flex;
-    align-items:center;
-    margin:15px 0;
-}
-
-.form-row label{
-    width:150px;
-    text-align:left;
-}
-
-.form-row input{
-    flex:1;
-    padding:8px;
-}
-
-/* 错误红框 */
-.is-invalid{
-    border:2px solid red !important;
-}
-
-/* Django错误提示 */
-.errorlist{
-    color:#dc3545;
-    list-style:none;
-    padding-left:0;
-    margin-bottom:10px;
-}
-
-/* password提示 */
-.help{
-    display:none;
-    font-size:14px;
-    color:#333;
-    margin-left:150px;
-    text-align:left;
-    margin-top:-5px;
-    margin-bottom:10px;
-}
-
-button{
-    margin-top:20px;
-    padding:10px 40px;
-}
-
-.role-box{
-    flex:1;
-    text-align:left;
-}
-
-.role-box label{
-    margin-right:20px;
-}
-
-</style>
+<link rel="stylesheet" href="{% static 'css/custom.css' %}">
 
 </head>
 
@@ -91,7 +20,6 @@ button{
 <div class="form-box">
 
 {% if form.errors %}
-
 <div class="errorlist">
 {{ form.errors }}
 </div>
@@ -112,7 +40,7 @@ onblur="hideHelp('userHelp')">
 
 <p id="userHelp" class="help">
 Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only.
-</p>
+</p >
 
 <div class="form-row">
 <label>Email:</label>
@@ -144,10 +72,10 @@ onblur="hideHelp('passHelp')">
 </div>
 
 <div id="passHelp" class="help">
-<p>• Your password must contain at least 8 characters.</p>
-<p>• Your password can’t be entirely numeric.</p>
-<p>• Your password can’t be too similar to your personal information.</p>
-<p>• Your password can’t be a commonly used password.</p>
+<p>• Your password must contain at least 8 characters.</p >
+<p>• Your password can’t be entirely numeric.</p >
+<p>• Your password can’t be too similar to your personal information.</p >
+<p>• Your password can’t be a commonly used password.</p >
 </div>
 
 <div class="form-row">
@@ -161,8 +89,7 @@ onblur="hideHelp('confirmHelp')">
 
 <p id="confirmHelp" class="help">
 Enter the same password as before, for verification.
-</p>
-
+</p >
 
 <button type="submit">Register</button>
 
@@ -170,10 +97,10 @@ Enter the same password as before, for verification.
 
 </div>
 
-<p>
+<p style="margin-top:20px;">
 Already have an account?
-<a href="{% url 'login' %}">Login here</a>
-</p>
+<a href="{% url 'login' %}">Login here</a >
+</p >
 
 </div>
 

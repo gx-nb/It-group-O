@@ -4,6 +4,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.utils import timezone
 from django.db.models import Q
+from django.contrib.messages import get_messages
 
 from .models import UserProfile, CheckInRecord, CheckOutRequest, RoomInspection
 from .forms import (
@@ -47,8 +48,6 @@ def register_view(request):
 
         if form.is_valid():
             form.save()
-
-            messages.success(request, "Registration successful")
 
             return redirect("login")
 
@@ -146,7 +145,10 @@ def dashboard_view(request):
         context["check_out_requests"] = check_out_requests
         context["inspections"] = inspections
 
-    return render(request, "accommodation/dashboard.html", context)
+
+    return render(request, "accommodation/dashboard.html", {
+        **context,
+    })
 
 
 # ---------------- DELETE CHECK-IN (ADMIN) ----------------
@@ -167,7 +169,6 @@ def delete_check_in(request, pk):
 
 
 # ---------------- CREATE CHECK-IN ----------------
-
 @login_required
 def create_check_in_record(request):
 
@@ -178,44 +179,53 @@ def create_check_in_record(request):
 
     if request.method == "POST":
 
-        form = CheckInRecordForm(request.POST)
+        data = request.POST.copy()
+        student_input = request.POST.get("student")
 
-        if form.is_valid():
+        from django.contrib.auth.models import User
 
-            room_number = form.cleaned_data["room_number"]
-            student = form.cleaned_data["student"]
+        if student_input:
+            try:
+                user = User.objects.get(username=student_input)
+                student_profile = user.userprofile
+                data["student"] = student_profile.id
+            except:
+                form = CheckInRecordForm(request.POST)
+                form.errors.pop("student", None)
+                form.add_error("student", "User does not exist.")
+                return render(request, "accommodation/create_check_in.html", {
+                    "form": form
+                })
 
-            student_exists = CheckInRecord.objects.filter(
-                student=student,
-                status="active"
-            ).exists()
+        form = CheckInRecordForm(data)
 
-            if student_exists:
-                return redirect("create_check_in")
 
-            room_exists = CheckInRecord.objects.filter(
-                room_number=room_number,
-                status="active"
-            ).exists()
+        if not form.is_valid():
 
-            if room_exists:
-                return redirect("create_check_in")
+            form.errors.pop("student", None)
 
-            record = form.save(commit=False)
+            form.add_error("student", "User does not exist.")
 
-            record.check_in_date = timezone.now().date()
-            record.status = "active"
+            return render(request, "accommodation/create_check_in.html", {
+                "form": form
+            })
 
-            record.save()
+        record = form.save(commit=False)
 
-            return redirect("dashboard")
+        record.check_in_date = timezone.now().date()
+        record.status = "active"
+
+        record.save()
+        messages.success(request, "Check-in record created successfully.")
+
+        return redirect("dashboard")
 
     else:
-
         form = CheckInRecordForm()
 
-    return render(request, "accommodation/create_check_in.html", {"form": form})
-
+    return render(request, "accommodation/create_check_in.html", {
+        "form": form,
+    })
 
 # ---------------- EDIT CHECK-IN ----------------
 
@@ -279,8 +289,11 @@ def create_check_out_request(request):
     ).first()
 
     if not check_in:
-        messages.warning(request, "You do not have an active check-in.")
-        return redirect("dashboard")
+        context = {
+            "profile": profile,
+            "warning": "You do not have an active check-in."
+        }
+        return render(request, "accommodation/dashboard.html", context)
 
     last_request = CheckOutRequest.objects.filter(
         student=profile
@@ -289,16 +302,25 @@ def create_check_out_request(request):
     if last_request:
 
         if last_request.status == "pending":
-            messages.warning(request, "You already have a pending checkout request.")
-            return redirect("dashboard")
+            context = {
+                "profile": profile,
+                "warning": "You already have a pending checkout request."
+            }
+            return render(request, "accommodation/dashboard.html", context)
 
         elif last_request.status == "approved":
-            messages.warning(request, "Your checkout request has already been approved.")
-            return redirect("dashboard")
+            context = {
+                "profile": profile,
+                "warning": "Your checkout request has already been approved."
+            }
+            return render(request, "accommodation/dashboard.html", context)
 
         elif last_request.status == "completed":
-            messages.warning(request, "Your checkout has already been completed.")
-            return redirect("dashboard")
+            context = {
+                "profile": profile,
+                "warning": "Your checkout has already been completed."
+            }
+            return render(request, "accommodation/dashboard.html", context)
 
     if request.method == "POST":
 
@@ -381,8 +403,12 @@ def inspection(request):
     ).first()
 
     if not check_in:
-        messages.warning(request, "You do not have an active check-in.")
-        return redirect("dashboard")
+
+        context = {
+            "profile": profile,
+            "warning": "You do not have an active check-in."
+        }
+        return render(request, "accommodation/dashboard.html", context)
 
     room_number = check_in.room_number
 
@@ -412,6 +438,7 @@ def inspection(request):
                 status="submitted"
             )
 
+        messages.success(request, "Inspection submitted successfully.")
         return redirect("dashboard")
 
     return render(request, "accommodation/inspection.html")

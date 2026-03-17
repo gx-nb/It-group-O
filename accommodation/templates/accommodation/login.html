@@ -1,80 +1,17 @@
+{% load static %}
 <!DOCTYPE html>
 <html>
 <head>
+<meta charset="UTF-8">
 <title>EduCheck Login</title>
 
-<style>
+<link rel="stylesheet" href="{% static 'css/custom.css' %}">
 
-body{
-    font-family: Arial;
-    background:#f2f2f2;
-}
-
-.container{
-    width:500px;
-    margin:100px auto;
-    text-align:center;
-}
-
-.form-box{
-    border:2px solid #888;
-    padding:30px;
-    margin-top:20px;
-}
-
-/* username password 一行 */
-.form-row{
-    display:flex;
-    align-items:center;
-    margin:15px 0;
-}
-
-.form-row label{
-    width:120px;
-    text-align:left;
-    font-size:18px;
-}
-
-.form-row input[type="text"],
-.form-row input[type="password"]{
-    flex:1;
-    padding:8px;
-}
-
-/* error message */
-.error{
-    color:red;
-    font-size:14px;
-    margin-top:5px;
-    text-align:left;
-    margin-left:120px;
-}
-
-/* button */
-button{
-    margin-top:25px;
-    padding:10px 40px;
-    font-size:16px;
-}
-
-</style>
 </head>
 
-
 <body>
 
-<body>
-
-{% if messages %}
-<script>
-{% for message in messages %}
-alert("{{ message }}");
-{% endfor %}
-</script>
-{% endif %}
-
-<div class="container">
-
+<div class="container login-container">
 
 <h1>EduCheck</h1>
 <h2>Login</h2>
@@ -106,7 +43,7 @@ alert("{{ message }}");
 
 </div>
 
-<p>
+<p style="margin-top:20px;">
 Don't have an account?
 <a href="{% url 'register' %}">Register</a >
 </p >

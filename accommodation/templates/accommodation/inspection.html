@@ -4,6 +4,14 @@
 
 <h1>Room Inspection</h1>
 
+<!-- if no check-in record -->
+{% if not check_in %}
+<div class="card">
+<p class="empty-message">No check-in record. Inspection cannot be submitted.</p >
+</div>
+
+{% else %}
+
 <form method="POST">
 {% csrf_token %}
 
@@ -13,7 +21,7 @@
 
 <h3>Room Condition</h3>
 
-<select id="conditionSelect" name="condition">
+<select id="conditionSelect" name="condition" class="form-control">
 
 <option value="no"
 {% if inspection and inspection.issues == "No issues" %}selected{% endif %}>
@@ -21,7 +29,7 @@ No issues
 </option>
 
 <option value="yes"
-{% if inspection and inspection.issues != "No issues" %}selected{% endif %}>
+{% if inspection and inspection.issues and inspection.issues != "No issues" %}selected{% endif %}>
 Has issues
 </option>
 
@@ -33,7 +41,7 @@ Has issues
 <!-- Issues -->
 
 <div class="card" id="issuesBox"
-{% if inspection and inspection.issues != "No issues" %}
+{% if inspection and inspection.issues and inspection.issues != "No issues" %}
 style="display:block;"
 {% else %}
 style="display:none;"
@@ -46,31 +54,31 @@ style="display:none;"
 
 <label class="issue-item">
 <input type="checkbox" name="issues" value="Walls damaged"
-{% if inspection and "Walls damaged" in inspection.issues %}checked{% endif %}>
+{% if inspection and inspection.issues and "Walls damaged" in inspection.issues %}checked{% endif %}>
 <span>Walls damaged</span>
 </label>
 
 <label class="issue-item">
 <input type="checkbox" name="issues" value="Furniture damaged"
-{% if inspection and "Furniture damaged" in inspection.issues %}checked{% endif %}>
+{% if inspection and inspection.issues and "Furniture damaged" in inspection.issues %}checked{% endif %}>
 <span>Furniture damaged</span>
 </label>
 
 <label class="issue-item">
 <input type="checkbox" name="issues" value="Bathroom problem"
-{% if inspection and "Bathroom problem" in inspection.issues %}checked{% endif %}>
+{% if inspection and inspection.issues and "Bathroom problem" in inspection.issues %}checked{% endif %}>
 <span>Bathroom problem</span>
 </label>
 
 <label class="issue-item">
 <input type="checkbox" name="issues" value="Window problem"
-{% if inspection and "Window problem" in inspection.issues %}checked{% endif %}>
+{% if inspection and inspection.issues and "Window problem" in inspection.issues %}checked{% endif %}>
 <span>Window problem</span>
 </label>
 
 <label class="issue-item">
 <input type="checkbox" name="issues" value="Electricity problem"
-{% if inspection and "Electricity problem" in inspection.issues %}checked{% endif %}>
+{% if inspection and inspection.issues and "Electricity problem" in inspection.issues %}checked{% endif %}>
 <span>Electricity problem</span>
 </label>
 
@@ -85,7 +93,7 @@ style="display:none;"
 
 <h3>Comments</h3>
 
-<textarea name="comments" rows="3">{{ inspection.comments }}</textarea>
+<textarea name="comments" rows="3" placeholder="Additional comments (optional)">{{ inspection.comments }}</textarea>
 
 </div>
 
@@ -102,11 +110,15 @@ Submit Inspection
 
 </form>
 
+{% endif %}
+
 
 <script>
 
 const select = document.getElementById("conditionSelect");
 const issuesBox = document.getElementById("issuesBox");
+
+if(select){
 
 select.addEventListener("change", function(){
 
@@ -117,6 +129,8 @@ issuesBox.style.display = "none";
 }
 
 });
+
+}
 
 </script>
 

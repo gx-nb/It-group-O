@@ -1,7 +1,6 @@
-// 无障碍 + 表单验证最终版
 document.addEventListener('DOMContentLoaded', function () {
 
-    // ESC 关闭 alert
+    // ESC close alert
     document.addEventListener('keydown', function (e) {
         if (e.key === 'Escape') {
             const alerts = document.querySelectorAll('.alert');
@@ -20,7 +19,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
             let hasError = false;
 
-            // 清除旧错误
             form.querySelectorAll('.invalid-feedback').forEach(el => el.remove());
 
             const requiredInputs = form.querySelectorAll('[required]');
@@ -46,7 +44,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
             });
 
-            // Email 格式检查
+            // Email format check
             const email = form.querySelector("input[name='email']");
             if (email && email.value && !email.value.includes("@")) {
 
@@ -61,7 +59,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 email.parentNode.appendChild(errorDiv);
             }
 
-            // Password match 检查
+            // Password match check
             const p1 = form.querySelector("input[name='password1']");
             const p2 = form.querySelector("input[name='password2']");
 
@@ -87,7 +85,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         });
 
-        // 输入时清除错误
+        // Clear errors during input
         form.querySelectorAll('input').forEach(input => {
 
             input.addEventListener('input', function () {

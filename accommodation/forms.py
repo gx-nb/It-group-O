@@ -41,15 +41,31 @@ class CheckInRecordForm(forms.ModelForm):
         model = CheckInRecord
         fields = ["student", "room_number"]
 
-        widgets = {
-            "student": forms.Select(attrs={
-                "class": "form-control"
-            }),
 
-            "room_number": forms.TextInput(attrs={
-                "class": "form-control"
-            }),
-        }
+    def clean(self):
+        cleaned_data = super().clean()
+
+        student = cleaned_data.get("student")
+        room_number = cleaned_data.get("room_number")
+
+        errors = []
+
+        # check if student has active check-in
+        if student:
+            if CheckInRecord.objects.filter(student=student, status="active").exists():
+                errors.append("This student already has an active check-in.")
+
+        # check if room is occupied
+        if room_number:
+            if CheckInRecord.objects.filter(room_number=room_number, status="active").exists():
+                errors.append("This room already has an active check-in.")
+
+        if errors:
+            raise forms.ValidationError(
+                ["Cannot create check-in record. Possible reasons:"] + errors
+            )
+
+        return cleaned_data
 
 
 # ---------------- CHECK-OUT REQUEST ----------------
@@ -67,7 +83,21 @@ class CheckOutRequestForm(forms.ModelForm):
         ]
 
         widgets = {
-            "requested_check_out_date": forms.DateInput(attrs={"type": "date"})
+            "requested_check_out_date": forms.DateInput(attrs={
+                "type": "date",
+                "class": "form-control"
+            }),
+            "reason": forms.TextInput(attrs={
+                "class": "form-control"
+            }),
+            "issues": forms.Textarea(attrs={
+                "class": "form-control",
+                "rows": 3
+            }),
+            "comments": forms.Textarea(attrs={
+                "class": "form-control",
+                "rows": 3
+            }),
         }
 
 
@@ -78,3 +108,13 @@ class CheckOutStatusForm(forms.ModelForm):
     class Meta:
         model = CheckOutRequest
         fields = ["status", "admin_note"]
+
+        widgets = {
+            "status": forms.Select(attrs={
+                "class": "form-control"
+            }),
+            "admin_note": forms.Textarea(attrs={
+                "class": "form-control",
+                "rows": 3
+            })
+        }

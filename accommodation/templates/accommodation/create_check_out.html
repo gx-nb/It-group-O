@@ -5,6 +5,15 @@
 <h1>Check-out Application</h1>
 <div class="checkout-page">
 
+<!-- if no check-in record -->
+{% if not room_number %}
+
+<div class="card">
+<p class="empty-message">No check-in record. You cannot submit a check-out request.</p >
+</div>
+
+{% else %}
+
 <form method="POST">
 {% csrf_token %}
 
@@ -28,37 +37,37 @@
 
 <label class="issue-item">
 <input type="checkbox" name="issues" value="No issues"
-{% if "No issues" in form.instance.issues %}checked{% endif %}>
+{% if form.instance.issues and "No issues" in form.instance.issues %}checked{% endif %}>
 No issues
 </label>
 
 <label class="issue-item">
 <input type="checkbox" name="issues" value="Walls damaged"
-{% if "Walls damaged" in form.instance.issues %}checked{% endif %}>
+{% if form.instance.issues and "Walls damaged" in form.instance.issues %}checked{% endif %}>
 Walls damaged
 </label>
 
 <label class="issue-item">
 <input type="checkbox" name="issues" value="Furniture damaged"
-{% if "Furniture damaged" in form.instance.issues %}checked{% endif %}>
+{% if form.instance.issues and "Furniture damaged" in form.instance.issues %}checked{% endif %}>
 Furniture damaged
 </label>
 
 <label class="issue-item">
 <input type="checkbox" name="issues" value="Bathroom problem"
-{% if "Bathroom problem" in form.instance.issues %}checked{% endif %}>
+{% if form.instance.issues and "Bathroom problem" in form.instance.issues %}checked{% endif %}>
 Bathroom problem
 </label>
 
 <label class="issue-item">
 <input type="checkbox" name="issues" value="Window problem"
-{% if "Window problem" in form.instance.issues %}checked{% endif %}>
+{% if form.instance.issues and "Window problem" in form.instance.issues %}checked{% endif %}>
 Window problem
 </label>
 
 <label class="issue-item">
 <input type="checkbox" name="issues" value="Electricity problem"
-{% if "Electricity problem" in form.instance.issues %}checked{% endif %}>
+{% if form.instance.issues and "Electricity problem" in form.instance.issues %}checked{% endif %}>
 Electricity problem
 </label>
 
@@ -109,7 +118,7 @@ Personal reason
 
 <label>Comments (optional)</label>
 
-<textarea name="comments">{{ form.instance.comments }}</textarea>
+<textarea name="comments" placeholder="Additional comments (optional)">{{ form.instance.comments }}</textarea>
 
 </div>
 
@@ -128,5 +137,6 @@ Submit
 
 </form>
 
+{% endif %}
 
 {% endblock %}
